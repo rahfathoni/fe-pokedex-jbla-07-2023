@@ -7,5 +7,6 @@ export default function () {
       type: '',
       list: []
     },
+    endData: false
   };
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pt-md q-pb-lg">
+  <div class="q-pt-md q-pb-lg scrolling-component" ref="scrollComponent">
     <div class="text-center">
       <div class="text-center">
         <q-img :width="$q.platform.is.mobile ? '50%' : '30%'" :src="require('@/assets/gotta-catch-them-all.png')" />
@@ -25,14 +25,13 @@
             <!-- <q-item-label caption>Subhead</q-item-label> -->
           </q-item-section>
         </q-item>
-
       </q-card>
     </div>
   </div>
 </template>
 
 <script>
-import { onBeforeMount, computed } from "vue";
+import { onBeforeMount, computed, ref, onUnmounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -40,8 +39,11 @@ export default {
   setup() {
     const store = useStore();
 
+    const scrollComponent = ref(null)
+
     //BEFORE MOUNTED
     onBeforeMount(async () => {
+      window.addEventListener("scroll", handleScroll)
       const data = store.getters["main/getPokemonList"];
       const stateOffset = store.getters["main/getOffset"];
       if (data && data.length === 0) {
@@ -50,12 +52,36 @@ export default {
         });
       }
     });
+    
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll)
+    })
 
     //COMPUTED
     const pokemonList = computed(() => store.getters["main/getPokemonList"]);
-  
+    const loading = computed(() => store.getters["main/getLoading"]);
+
+    const loadMorePosts = async () => {
+      const stateOffset = store.getters["main/getOffset"];
+      if (!loading.value) {
+        await store.dispatch("main/inquiryListPokemon", {
+          offset: stateOffset
+        });
+      }
+    }
+    const handleScroll = () => {
+      if (!store.getters["main/getEndData"]) {
+        let element = scrollComponent.value
+        if (element.getBoundingClientRect().bottom < window.innerHeight) {
+          loadMorePosts()
+        }
+      }
+    }
+
     return {
-      pokemonList
+      pokemonList,
+      loadMorePosts,
+      scrollComponent
     };
   }
 }

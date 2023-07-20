@@ -1,13 +1,17 @@
 const services = require("@/services/index").default;
 
 export const inquiryListPokemon = async (store, payload) => {
+  store.commit("setLoading", true)
   const reqList = {
     offset: payload.offset,
-    limit: payload.offset + 50
+    limit: 50
   }
   try {
     let allData;
     const res = await services.GetListPokemon(reqList);
+    if (!res.next) {
+      store.commit("setEndData", true)
+    }
     if (res && res.results.length >= 0) {
       const resDetail = res.results.map((item) => {
         const reqDetail = {
@@ -21,8 +25,10 @@ export const inquiryListPokemon = async (store, payload) => {
     }
     store.commit("setPokemonList", allData);
     store.commit("setOffset", reqList.limit)
+    store.commit("setLoading", false)
   } catch (err) {
     console.log('ERR inquiryListPokemon', err)
+    store.commit("setLoading", false)
   }
 };
 

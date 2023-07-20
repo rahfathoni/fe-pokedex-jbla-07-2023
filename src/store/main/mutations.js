@@ -1,6 +1,12 @@
+import {
+  Loading,
+  QSpinnerGears
+} from 'quasar'
+
 export const resetAll = (state) => {
   state.pokemonList = [];
   state.offset = 0;
+  state.endData = false;
 };
 
 export const setPokemonList = async (state, value) => {
@@ -14,10 +20,22 @@ export const setPokemonList = async (state, value) => {
 
 export const setLoading = (state, value) => {
   state.loading = value;
+  if (state.loading) {
+    Loading.show({
+      spinner: QSpinnerGears,
+      message: "Looking for Pokemon data, please wait..."
+    })
+    return;
+  }
+  Loading.hide()
 }
 
 export const setOffset = (state, value) => {
-  state.offset = value;
+  state.offset = state.offset + value;
+}
+
+export const setEndData = (state, value) => {
+  state.endData = value;
 }
 
 // export const setAllAreas = (state, value) => {

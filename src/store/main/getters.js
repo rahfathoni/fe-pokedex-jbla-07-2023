@@ -1,13 +1,12 @@
 // import { convertDate } from "@/utils";
 
-export const getPokemonList = (state) => {
-  console.log('state =>', state.pokemonList)
-  return state.pokemonList
-};
+export const getPokemonList = (state) => state.pokemonList;
 
 export const getOffset = (state) => state.offset;
 
 export const getLoading = (state) => state.loading;
+
+export const getEndData = (state) => state.endData;
 
 // export const getTeamList = (state) => state.teamList;
 
