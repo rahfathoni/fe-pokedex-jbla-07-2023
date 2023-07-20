@@ -2,7 +2,9 @@
   <div class="q-pt-md q-pb-lg scrolling-component" ref="scrollComponent">
     <div class="text-center">
       <div class="text-center">
+        <q-img class="q-mr-lg" :width="$q.platform.is.mobile ? '15%' : '10%'" :src="require('@/assets/pokeball.png')" alt="pokeball1" />
         <q-img :width="$q.platform.is.mobile ? '50%' : '30%'" :src="require('@/assets/gotta-catch-them-all.png')" />
+        <q-img  class="q-ml-lg" :width="$q.platform.is.mobile ? '15%' : '10%'" :src="require('@/assets/pokeball.png')" alt="pokeball2" />
       </div>
     </div>
     <div class="fit row inline wrap justify-around items-start content-start">
@@ -12,8 +14,8 @@
         v-ripple
         class="col-4 q-mx-md q-mt-lg cursor-pointer q-hoverable"
         :style="'border: 2px solid blue;' + ($q.platform.is.mobile ? 'width: 100px' : 'width: 150px')"
+        @click="detailDialog(item)"
       >
-        <!-- @click="redirect(item)" -->
         <q-img :src="
           item.sprites.other['official-artwork'].front_default ? item.sprites.other['official-artwork'].front_default : 
           item.sprites.other.home.front_default" 
@@ -33,11 +35,14 @@
 <script>
 import { onBeforeMount, computed, ref, onUnmounted } from "vue";
 import { useStore } from "vuex";
+import { useQuasar } from "quasar";
+import PokemonDetailComponent from  "./pokemon/Detail.vue"
 
 export default {
   name: 'HomeView',
   setup() {
     const store = useStore();
+    const $q = useQuasar();
 
     const scrollComponent = ref(null)
 
@@ -77,11 +82,18 @@ export default {
         }
       }
     }
+    const detailDialog = async (item) => {
+      store.commit('main/setPokemonDetail', item);
+      $q.dialog({
+        component: PokemonDetailComponent,
+      }).onOk(() => {});
+    }
 
     return {
       pokemonList,
       loadMorePosts,
-      scrollComponent
+      scrollComponent,
+      detailDialog
     };
   }
 }

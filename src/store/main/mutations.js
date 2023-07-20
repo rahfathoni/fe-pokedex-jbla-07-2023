@@ -38,9 +38,9 @@ export const setEndData = (state, value) => {
   state.endData = value;
 }
 
-// export const setAllAreas = (state, value) => {
-//   state.allAreas = value;
-// };
+export const setPokemonDetail = (state, value) => {
+  state.pokemonDetail = value;
+};
 
 // export const setTeamList = (state, value) => {
 //   if (!value) {

@@ -8,6 +8,8 @@ export const getLoading = (state) => state.loading;
 
 export const getEndData = (state) => state.endData;
 
+export const getPokemonDetail = (state) => state.pokemonDetail;
+
 // export const getTeamList = (state) => state.teamList;
 
 // export const getTeamDetail = (state) => state.teamDetail;

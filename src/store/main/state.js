@@ -3,10 +3,7 @@ export default function () {
     pokemonList: [],
     offset: 0,
     loading: false,
-    filter: {
-      type: '',
-      list: []
-    },
-    endData: false
+    endData: false,
+    pokemonDetail: ''
   };
 }
