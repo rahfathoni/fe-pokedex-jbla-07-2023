@@ -1,5 +1,19 @@
 # fe-pokedex-jbla-07-2023
 Frontend Test
+## WEBSITE URL
+
+        https://my-pokedex-fathoni.web.app/
+
+## HOW TO OPEN FROM GIT REPOSITORY
+
+    1. git clone https://github.com/rahfathoni/fe-pokedex-jbla-07-2023.git
+    2. npm install
+    3. npm run serve
+
+Start date: 18 July 2023\
+Finish date: 21 July 2023
+
+
 
 ## Project setup
 ```
