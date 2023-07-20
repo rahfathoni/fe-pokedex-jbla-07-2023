@@ -6,51 +6,44 @@
     :maximized="$q.platform.is.mobile"
     >
     <q-card class="q-dialog-plugin" style="width: 1000px">
-      <q-bar>
+      <q-bar style="border-bottom: 2px solid blue; background-color: yellow" class="glossy" >
         <q-space />
-        <q-btn dense flat icon="close" v-close-popup>
+        <q-btn dense flat text-color="blue" size="15px" icon="close" v-close-popup>
           <q-tooltip class="bg-white text-primary">Close</q-tooltip>
         </q-btn>
       </q-bar>
 
-      <q-card-section
-        class="fit row inline wrap justify-center items-start content-start q-pt-md q-pb-none q-px-lg"
-        horizontal
+      <q-carousel
+        animated
+        v-model="slide"
+        arrows
+        control-color="blue"
+        thumbnails
+        swipeable
       >
-      Under Construction
-      <!-- {{detail}} -->
-        <!-- <q-card-section class="q-pt-md q-pb-none">
-          <div class="text-h4 q-mb-sm">{{ playerDetail.name }}</div>
-          <div
-            v-for="(item, index) in playerDetail.data"
-            :key="'id' + index"
-            class="fit row inline wrap justify-start items-start content-start"
-            style="font-size: 15px"
-          >
-            <div class="col-5 q-mb-sm">{{ item.field }}</div>
-            <div class="col-1">:</div>
-            <div class="col-6 text-weight-medium">
-              {{ item.value }}
-            </div>
-          </div>
-        </q-card-section> -->
+        <q-carousel-slide 
+          v-for="(item, index) in detailPicture" 
+          :key="index" 
+          :name="index" 
+          :img-src="item" 
+          :alt="`Slide ${index + 1}`" 
+        />
+      </q-carousel>
 
-        <!-- <q-card-section class="col-4 flex flex-center">
-          <q-img class="rounded-borders" src="../../../assets/noimage.png" />
-        </q-card-section> -->
+      <q-card-section class="q-pt-sm" style="text-align: center;">
+        <div class="text-h6 text-uppercase">[#{{ detail.id }}] {{ detail.name }}</div>
       </q-card-section>
-      <q-separator class="q-pt-none bg-color-red-v1" inset />
-      <!-- <q-card-section class="q-pt-sm q-pb-lg">
-        <div style="font-size: 10px" class="text-right">
-          Last updated : {{ playerDetail.lastUpdated }}
-        </div>
-      </q-card-section> -->
+        <!-- <div class="text-subtitle2">by John Doe</div> -->
+
+      <q-card-section class="q-pt-none">
+        under constraction
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useDialogPluginComponent } from "quasar";
 
@@ -60,15 +53,30 @@ export default {
   setup() {
     const { dialogRef, onDialogHide } = useDialogPluginComponent();
     const store = useStore();
+    const slide = ref(1);
 
     //COMPUTED
     const detail = computed(() => store.getters["main/getPokemonDetail"]);
+    const detailPicture = computed(() => {
+      const choosenPic = [
+        detail.value.sprites.other['official-artwork'].front_default,
+        detail.value.sprites.other.home.front_default,
+        detail.value.sprites.other.dream_world.front_default,
+        detail.value.sprites.front_default,
+        detail.value.sprites.other['official-artwork'].front_shiny
+      ]
+      return choosenPic.filter((item) => item !== null);
+    });
+
+    // console.log(store.getters["main/getPokemonDetail"])
 
     return {
       dialogRef,
       detail,
       onDialogHide,
+      slide,
+      detailPicture,
     };
-  },
+  }
 };
 </script>
