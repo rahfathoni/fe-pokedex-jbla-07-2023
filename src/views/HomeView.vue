@@ -7,6 +7,23 @@
         <q-img  class="q-ml-lg" :width="$q.platform.is.mobile ? '15%' : '10%'" :src="require('@/assets/pokeball.png')" alt="pokeball2" />
       </div>
     </div>
+    <!-- <div class="text-left"> 
+      <q-select rounded outlined bottom-slots v-model="typeFilter" :options="options" label="Choose Type...">
+        <template v-slot:before>
+          <q-icon name="flight_takeoff" />
+        </template>
+
+        <template v-slot:append>
+          <q-icon v-if="typeFilter !== ''" name="close" @click.stop.prevent="typeFilter = ''" class="cursor-pointer" />
+          <q-icon name="search" @click.stop.prevent />
+        </template>
+
+        <template v-slot:hint>
+          Field hint
+        </template>
+      </q-select>
+    </div> -->
+
     <div class="fit row inline wrap justify-around items-start content-start">
       <q-card
         v-for="(item, index) in pokemonList"
@@ -21,10 +38,9 @@
           item.sprites.other.home.front_default" 
           :alt="item.name"
         />
-        <q-item class="bg-grey-6">
+        <q-item class="bg-yellow glossy">
           <q-item-section>
-            <q-item-label class="text-subtitle2 text-center text-uppercase">[#{{item.id}}] {{ item.name }}</q-item-label>
-            <!-- <q-item-label caption>Subhead</q-item-label> -->
+            <q-item-label class="text-subtitle2 text-weight-bold text-center text-uppercase">[#{{item.id}}] {{ item.name }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-card>
@@ -44,7 +60,8 @@ export default {
     const store = useStore();
     const $q = useQuasar();
 
-    const scrollComponent = ref(null)
+    const scrollComponent = ref(null);
+    const typeFilter = ref(null);
 
     //BEFORE MOUNTED
     onBeforeMount(async () => {
@@ -65,6 +82,7 @@ export default {
     //COMPUTED
     const pokemonList = computed(() => store.getters["main/getPokemonList"]);
     const loading = computed(() => store.getters["main/getLoading"]);
+    const optionType = computed(() => store.getters["main/getOptionType"]);
 
     const loadMorePosts = async () => {
       const stateOffset = store.getters["main/getOffset"];
@@ -95,7 +113,9 @@ export default {
       pokemonList,
       loadMorePosts,
       scrollComponent,
-      detailDialog
+      detailDialog,
+      typeFilter,
+      optionType
     };
   }
 }

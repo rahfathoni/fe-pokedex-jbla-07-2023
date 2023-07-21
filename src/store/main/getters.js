@@ -8,6 +8,8 @@ export const getEndData = (state) => state.endData;
 
 export const getFavPokemonList = (state) => state.favPokemonList;
 
+export const getOptionType = (state) => state.optionType;
+
 // export const getTeamProfile = (state) => {
 //   const detail = state.teamDetail;
 //   const area = state.teamArea;
