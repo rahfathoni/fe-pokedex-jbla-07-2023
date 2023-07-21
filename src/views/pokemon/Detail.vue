@@ -83,10 +83,41 @@
         </div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <h4 class="text-weight-bold q-my-none text-red"> About </h4>
+      <q-card-section class="q-pt-none q-pb-lg q-mb-md">
+        <h4 class="text-weight-bold q-my-none text-red"> STATS </h4>
         <q-separator size="1px" color="blue" />
-        other detail under constraction
+        <div 
+          class="fit row inline wrap justify-start items-start content-start q-pt-md"
+          style="font-size: 15px"
+        >
+          <div class="col-4 q-mb-sm">HEIGHT</div>
+          <div class="col-1">:</div>
+          <div class="col-7 text-weight-medium">
+            {{ convertHeight }} CM
+          </div>
+        </div>
+        <div
+          class="fit row inline wrap justify-start items-start content-start q-pt-none"
+          style="font-size: 15px"
+        >
+          <div class="col-4 q-mb-sm">WEIGHT</div>
+          <div class="col-1">:</div>
+          <div class="col-7 text-weight-medium">
+            {{ convertWeight }} KG
+          </div>
+        </div>
+        <div
+          v-for="(item, index) in simplifiedStats"
+          :key="index"
+          class="fit row inline wrap justify-start items-start content-start q-pt-none"
+          style="font-size: 15px"
+        >
+          <div class="col-4 q-mb-sm">{{ item.name }}</div>
+          <div class="col-1">:</div>
+          <div class="col-7 text-weight-medium">
+            {{ item.base_stat }}
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -130,6 +161,19 @@ export default {
       }
       return false;
     })
+    const convertHeight = computed(() => {
+      return (props.pokemonData.height ? props.pokemonData.height * 10 : '-');
+    });
+    const convertWeight = computed(() => {
+      return (props.pokemonData.height ? (props.pokemonData.weight * 0.1).toFixed(0) : '-');
+    });
+    const simplifiedStats = computed(() => {
+      const newStats = props.pokemonData.stats.map((item) => ({
+        name: item.stat.name.toUpperCase() || '-',
+        base_stat: item.base_stat || '-'
+      }));
+      return newStats;
+    })
 
     const findColorType = (item) => {
       return typeColor(item)
@@ -141,8 +185,6 @@ export default {
       store.commit('main/deleteFavorite', props.pokemonData);
     }
 
-    console.log('check prop =>',props.pokemonData)
-
     return {
       dialogRef,
       onDialogHide,
@@ -152,7 +194,10 @@ export default {
       findColorType,
       addFavorite,
       isFavorite,
-      deleteFavorite
+      deleteFavorite,
+      convertHeight,
+      convertWeight,
+      simplifiedStats
     };
   }
 };

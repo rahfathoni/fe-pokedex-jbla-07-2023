@@ -19,10 +19,6 @@
           label="Choose Type..."
           @update:model-value="inputFilterType"
         >
-          <template v-slot:before>
-            <q-icon size="md" name="search" />
-          </template>
-
           <template v-slot:append>
             <q-icon v-if="typeFilter" name="close" @click.stop.prevent="clearInputType" class="cursor-pointer" />
           </template>
