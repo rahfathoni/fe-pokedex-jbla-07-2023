@@ -27,7 +27,6 @@
         <q-item-label header class="flex flex-center"> 
           <q-img width="60%" :src="require('@/assets/pokemon-word.png')" alt="pokeword" />
         </q-item-label>
-        <!-- <q-item clickable tag="a" target="_blank" href="https://quasar.dev"> -->
         <q-item clickable to="/">
           <q-item-section avatar>
             <q-icon name="home" color="red" />
@@ -36,7 +35,6 @@
             <q-item-label>HOME</q-item-label>
           </q-item-section>
         </q-item>
-        <!-- <q-item clickable tag="a" target="_blank" href="https://github.com/quasarframework/"> -->
         <q-item clickable to="/favorite">
           <q-item-section avatar>
             <q-icon name="star" style="color: #FFC300" />
@@ -65,11 +63,19 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'LayoutDefault',
   setup () {
+    const store = useStore();
+
+    //BEFORE MOUNTED
+    onBeforeMount(async () => {
+      await store.dispatch("main/fetchFavoritePokemon");
+    });
+
     return {
       leftDrawerOpen: ref(false)
     }
@@ -83,7 +89,7 @@ export default {
   font-size: 12px;
   padding: 8px;
   bottom: 0;
-  /* width: 100%; */
+  width: 100%;
   border-top: 0.3px solid black;
 }
 </style>

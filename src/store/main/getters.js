@@ -1,5 +1,3 @@
-// import { convertDate } from "@/utils";
-
 export const getPokemonList = (state) => state.pokemonList;
 
 export const getOffset = (state) => state.offset;
@@ -8,13 +6,7 @@ export const getLoading = (state) => state.loading;
 
 export const getEndData = (state) => state.endData;
 
-export const getPokemonDetail = (state) => state.pokemonDetail;
-
-// export const getTeamList = (state) => state.teamList;
-
-// export const getTeamDetail = (state) => state.teamDetail;
-
-// export const getTeamArea = (state) => state.teamArea;
+export const getFavPokemonList = (state) => state.favPokemonList;
 
 // export const getTeamProfile = (state) => {
 //   const detail = state.teamDetail;

@@ -23,7 +23,7 @@
         />
         <q-item class="bg-grey-6">
           <q-item-section>
-            <q-item-label class="text-subtitle2 text-center text-uppercase">#{{item.order}} - {{ item.name }}</q-item-label>
+            <q-item-label class="text-subtitle2 text-center text-uppercase">[#{{item.id}}] {{ item.name }}</q-item-label>
             <!-- <q-item-label caption>Subhead</q-item-label> -->
           </q-item-section>
         </q-item>
@@ -83,9 +83,11 @@ export default {
       }
     }
     const detailDialog = async (item) => {
-      store.commit('main/setPokemonDetail', item);
       $q.dialog({
         component: PokemonDetailComponent,
+        componentProps: {
+          pokemonData: item,
+        }
       }).onOk(() => {});
     }
 

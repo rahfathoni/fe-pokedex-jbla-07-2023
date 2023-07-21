@@ -38,10 +38,18 @@ export const setEndData = (state, value) => {
   state.endData = value;
 }
 
-export const setPokemonDetail = (state, value) => {
-  state.pokemonDetail = value;
-};
+export const setInitFavPokemonList = (state, value) => {
+  state.favPokemonList = value;
+} 
 
+export const addFavPokemon = async (state, value) => {
+  // Save store
+  const data = state.favPokemonList;
+  await data.push(value);
+  state.favPokemonList = data;
+  // Save localStorage
+  localStorage.setItem('fav_pokemon', JSON.stringify(data));
+} 
 // export const setTeamList = (state, value) => {
 //   if (!value) {
 //     state.teamList = {
