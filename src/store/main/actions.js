@@ -12,7 +12,7 @@ export const inquiryListPokemon = async ({ commit }, payload) => {
     if (!res.next) {
       commit("setEndData", true)
     }
-    if (res && res.results.length >= 0) {
+    if (res && res.results.length > 0) {
       const resDetail = res.results.map((item) => {
         const reqDetail = {
           url: item.url,
@@ -23,7 +23,12 @@ export const inquiryListPokemon = async ({ commit }, payload) => {
       allData = await Promise.all(resDetail);
       console.log('RES inquiryListPokemon', allData);
     }
-    commit("setPokemonList", allData);
+    if (payload.afterType) {
+      commit("setPokemonByType", allData);
+      commit("setEndData", false)
+    } else {
+      commit("setPokemonList", allData);
+    }
     commit("setOffset", reqList.limit);
     commit("setLoading", false);
   } catch (err) {
@@ -45,14 +50,32 @@ export const fetchFavoritePokemon = async ({ commit }) => {
     console.log('ERR fetchFavoritePokemon', err);
   }
 } 
-// export const inquiryDetailPokemon = async (payload) => {
-//   const req = {
-//     url: payload.url,
-//     mode: payload.mode
-//   }
-//   try {
-//     const res = await services.GetDetailPokemon(req);
-//     return res;
-//   } catch (err) {
-//     console.log('ERR inquiryDetailPokemon', err)
-//   }
+
+export const inquiryPokemonByType = async ({commit}, payload) => {
+  commit("setLoading", true);
+  const reqList = {
+    type: payload.type.toLowerCase() || '',
+  }
+  try {
+    let allData;
+    const res = await services.GetPokemonByType(reqList);
+    commit("setEndData", true)
+    if (res && res.pokemon.length > 0) {
+      const resDetail = res.pokemon.map((item) => {
+        const reqDetail = {
+          url: item.pokemon.url,
+          mode: 'all'
+        };
+        return services.GetDetailPokemon(reqDetail);
+      });
+      allData = await Promise.all(resDetail);
+      console.log('RES inquiryPokemonByType', allData);
+    }
+    commit("setPokemonByType", allData);
+    commit("setOffset", 0);
+    commit("setLoading", false);
+  } catch (err) {
+    console.log('ERR inquiryPokemonByType', err);
+    commit("setLoading", false);
+  }
+}

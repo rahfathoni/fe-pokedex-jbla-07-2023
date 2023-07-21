@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const baseURL = 'https://pokeapi.co/api/v2';
+
 export default {
   GetListPokemon: async (payload) => {
     try {
       console.log('REQ GetListPokemon ', payload);
-      const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${payload.offset}&limit=${payload.limit}}`);
+      const res = await axios.get(`${baseURL}/pokemon?offset=${payload.offset}&limit=${payload.limit}}`);
       console.log("RES GetListPokemon", res.data);
       return res.data;
     } catch (err) {
@@ -16,10 +18,21 @@ export default {
     try {
       if (payload.mode === 'detail') console.log('REQ GetDetailPokemon', payload);
       const res = await axios.get(`${payload.url}`);
-      if (payload.mode === 'detail') console.log("RES GetDetailPokemon", res);
+      if (payload.mode === 'detail') console.log("RES GetDetailPokemon", res.data);
       return res.data;
     } catch (err) {
       console.error("ERR GetListPokemon", payload, err);
+      throw err;
+    }
+  },
+  GetPokemonByType: async (payload) => {
+    try {
+      console.log('REQ GetPokemonByType', payload);
+      const res = await axios.get(`${baseURL}/type/${payload.type}`)
+      console.log('RES GetPokemonByType', res.data);
+      return res.data;
+    } catch (err) {
+      console.error("ERR GetPokemonByType", payload, err);
       throw err;
     }
   }
