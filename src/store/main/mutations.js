@@ -1,6 +1,7 @@
 import {
   Loading,
-  QSpinnerGears
+  QSpinnerGears,
+  Notify
 } from 'quasar'
 
 export const resetAll = (state) => {
@@ -13,7 +14,7 @@ export const setPokemonList = async (state, value) => {
   const data = state.pokemonList;
   if (!value && value.length === 0) return;
   await value.map(async (item) => {
-    await data.push(item)
+    await data.push(item);
   });
   state.pokemonList = data;
 }
@@ -24,10 +25,10 @@ export const setLoading = (state, value) => {
     Loading.show({
       spinner: QSpinnerGears,
       message: "Looking for Pokemon data, please wait..."
-    })
+    });
     return;
   }
-  Loading.hide()
+  Loading.hide();
 }
 
 export const setOffset = (state, value) => {
@@ -43,41 +44,53 @@ export const setInitFavPokemonList = (state, value) => {
 } 
 
 export const addFavPokemon = async (state, value) => {
-  // Save store
+  Loading.show({
+    spinner: QSpinnerGears,
+    message: "Add to Your Favorite..."
+  });
   const data = state.favPokemonList;
   await data.push(value);
+
+  // Save store
+  state.favPokemonList = data;
+  
+  // Save localStorage
+  localStorage.setItem('fav_pokemon', JSON.stringify(data));
+  Loading.hide();
+  Notify.create({
+    message: 'Add Pokemon to your Favorite Success.',
+    color: 'green',
+    textColor: 'white',
+    icon: 'done',
+    iconColor: 'white',
+    timeout: 3000,
+    position: 'top'
+  });
+} 
+
+export const deleteFavorite = async (state, value) => {
+  Loading.show({
+    spinner: QSpinnerGears,
+    message: "Delete from Favorite..."
+  });
+  let data = state.favPokemonList;
+  let searchDelete = data.findIndex(item => item.id === value.id);
+  if (searchDelete !== -1) {
+    data.splice(searchDelete, 1);
+  }
+  // Save store
   state.favPokemonList = data;
   // Save localStorage
   localStorage.setItem('fav_pokemon', JSON.stringify(data));
-} 
-// export const setTeamList = (state, value) => {
-//   if (!value) {
-//     state.teamList = {
-//       area: "",
-//       list: [],
-//     };
-//     return;
-//   }
-//   state.teamList = {
-//     area: value.competition.country,
-//     list: value.teams,
-//   };
-// };
+  Loading.hide();
+  Notify.create({
+    message: 'Delete Pokemon from Favorite Success.',
+    color: 'red',
+    textColor: 'black',
+    icon: 'done',
+    iconColor: 'black',
+    timeout: 3000,
+    position: 'top'
+  });
+}
 
-// export const setTeamDetail = (state, value) => {
-//   if (!value) {
-//     state.teamDetail = "";
-//     state.teamArea = "";
-//     return;
-//   }
-//   state.teamDetail = value;
-//   state.teamArea = value.area;
-// };
-
-// export const setSquadDetail = (state, value) => {
-//   if (!value) {
-//     state.squadDetail = "";
-//     return;
-//   }
-//   state.squadDetail = value;
-// };

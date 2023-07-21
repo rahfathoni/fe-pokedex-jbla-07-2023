@@ -31,7 +31,16 @@
         />
       </q-carousel>
       <q-card-section class="q-pt-sm" style="text-align: center;">
-        <div class="text-h6 text-uppercase">[#{{ pokemonData.id }}] {{ pokemonData.name }}</div>
+        <div class="text-h6 text-uppercase">
+          [#{{ pokemonData.id }}] {{ pokemonData.name }}
+          <q-icon 
+            v-if="isFavorite" 
+            color="yellow" 
+            size="md" 
+            class="q-pb-xs q-pl-sm" 
+            name="star"
+          />  
+        </div>
         <div>
           <q-chip 
             v-for="(item, index) in detailTypes"
@@ -48,9 +57,35 @@
             {{item.toUpperCase()}}
           </q-chip>
         </div>
+        <div v-if="!isFavorite" class="q-pt-sm">
+          <q-btn 
+            class="text-weight-bold"
+            icon="star" 
+            text-color="blue" 
+            color="yellow"
+            glossy 
+            style="border: 2px solid blue"
+            label="Add To Your Favorite" 
+            @click.prevent="addFavorite"
+          />
+        </div>
+        <div v-if="isFavorite" class="q-pt-sm">
+          <q-btn 
+            class="text-weight-bold"
+            icon="delete" 
+            text-color="yellow" 
+            color="dark"
+            glossy 
+            style="border: 2px solid blue"
+            label="Delete From Favorite" 
+            @click.prevent="deleteFavorite"
+          />
+        </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
+        <h4 class="text-weight-bold q-my-none text-red"> About </h4>
+        <q-separator size="1px" color="blue" />
         other detail under constraction
       </q-card-section>
     </q-card>
@@ -59,7 +94,7 @@
 
 <script>
 import { ref, computed } from "vue";
-// import { useStore } from "vuex";
+import { useStore } from "vuex";
 import { useDialogPluginComponent } from "quasar";
 import { typeColor } from '@/utils.js';
 
@@ -74,7 +109,7 @@ export default {
   },
   setup(props) {
     const { dialogRef, onDialogHide } = useDialogPluginComponent();
-    // const store = useStore();
+    const store = useStore();
 
     const slide = ref(1);
     const detailPicture = ref([
@@ -87,9 +122,23 @@ export default {
     const detailTypes = computed(() => {
       return props.pokemonData.types.map((item) => item.type.name);
     })
+    const isFavorite = computed(() => {
+      const existFavorite = store.getters["main/getFavPokemonList"];
+      if (existFavorite && existFavorite.length > 0) {
+        const isFavorite = existFavorite.some((item) => item.id === props.pokemonData.id);
+        return isFavorite;
+      }
+      return false;
+    })
 
     const findColorType = (item) => {
       return typeColor(item)
+    }
+    const addFavorite = () => {
+      store.commit('main/addFavPokemon', props.pokemonData);
+    }
+    const deleteFavorite = () => {
+      store.commit('main/deleteFavorite', props.pokemonData);
     }
 
     console.log('check prop =>',props.pokemonData)
@@ -100,7 +149,10 @@ export default {
       slide,
       detailPicture,
       detailTypes,
-      findColorType
+      findColorType,
+      addFavorite,
+      isFavorite,
+      deleteFavorite
     };
   }
 };

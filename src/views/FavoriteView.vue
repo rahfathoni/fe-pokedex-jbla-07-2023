@@ -7,10 +7,11 @@
         <q-img  class="q-ml-lg" :width="$q.platform.is.mobile ? '15%' : '10%'" :src="require('@/assets/pokeball.png')" alt="pokeball2" />
       </div>
     </div>
-    <h3>Under Construction</h3>
-    <!-- <div class="fit row inline wrap justify-around items-start content-start">
+    <h4 class="text-weight-bold q-mb-none text-red"> Favorite </h4>
+    <q-separator size="3px" color="blue" />
+    <div class="fit row inline wrap justify-around items-start content-start">
       <q-card
-        v-for="(item, index) in pokemonList"
+        v-for="(item, index) in favoriteList"
         :key="'id' + index"
         v-ripple
         class="col-4 q-mx-md q-mt-lg cursor-pointer q-hoverable"
@@ -22,24 +23,45 @@
           item.sprites.other.home.front_default" 
           :alt="item.name"
         />
-        <q-item class="bg-grey-6">
+        <q-item class="bg-yellow glossy">
           <q-item-section>
-            <q-item-label class="text-subtitle2 text-center text-uppercase">#{{item.id}} - {{ item.name }}</q-item-label>
+            <q-item-label class="text-subtitle2 text-weight-bold text-center text-uppercase">[#{{item.id}}] {{ item.name }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-card>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useQuasar } from "quasar";
+import PokemonDetailComponent from  "./pokemon/Detail.vue"
+
 
 export default {
   name: 'FavoriteView',
-  // components: {
-  //   HelloWorld
-  // },
+  setup() {
+    const store = useStore();
+    const $q = useQuasar();
+
+    //COMPUTED
+    const favoriteList = computed(() => store.getters["main/getFavPokemonList"]);
+
+    const detailDialog = async (item) => {
+      $q.dialog({
+        component: PokemonDetailComponent,
+        componentProps: {
+          pokemonData: item,
+        }
+      }).onOk(() => {});
+    }
+
+    return {
+      favoriteList,
+      detailDialog
+    };
+  }
 }
 </script>

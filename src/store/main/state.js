@@ -4,6 +4,11 @@ export default function () {
     offset: 0,
     loading: false,
     endData: false,
-    favPokemonList: []
+    favPokemonList: [],
+    optionType: [
+      'normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting',
+      'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost',
+      'dragon', 'dark', 'steel', 'fairy'
+    ]
   };
 }
