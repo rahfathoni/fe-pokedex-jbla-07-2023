@@ -7,9 +7,9 @@
     :maximized="$q.platform.is.mobile"
     >
     <q-card class="q-dialog-plugin" style="width: 1000px; border: 2px solid blue; border-radius: 8px;">
-      <q-bar style="border-bottom: 2px solid blue; background-color: yellow" class="glossy" >
+      <q-bar style="border-bottom: 2px solid blue; background-color: yellow; height: 45px" class="glossy" >
         <q-space />
-        <q-btn dense flat text-color="blue" size="15px" icon="close" v-close-popup>
+        <q-btn dense flat text-color="blue" size="20px" icon="close" v-close-popup>
           <q-tooltip class="bg-white text-primary">Close</q-tooltip>
         </q-btn>
       </q-bar>
