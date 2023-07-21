@@ -1,7 +1,7 @@
 const services = require("@/services/index").default;
 
-export const inquiryListPokemon = async (store, payload) => {
-  store.commit("setLoading", true)
+export const inquiryListPokemon = async ({ commit }, payload) => {
+  commit("setLoading", true)
   const reqList = {
     offset: payload.offset,
     limit: 50
@@ -10,7 +10,7 @@ export const inquiryListPokemon = async (store, payload) => {
     let allData;
     const res = await services.GetListPokemon(reqList);
     if (!res.next) {
-      store.commit("setEndData", true)
+      commit("setEndData", true)
     }
     if (res && res.results.length >= 0) {
       const resDetail = res.results.map((item) => {
@@ -21,17 +21,30 @@ export const inquiryListPokemon = async (store, payload) => {
         return services.GetDetailPokemon(reqDetail);
       });
       allData = await Promise.all(resDetail);
-      console.log('RES inquiryListPokemon', allData)
+      console.log('RES inquiryListPokemon', allData);
     }
-    store.commit("setPokemonList", allData);
-    store.commit("setOffset", reqList.limit)
-    store.commit("setLoading", false)
+    commit("setPokemonList", allData);
+    commit("setOffset", reqList.limit);
+    commit("setLoading", false);
   } catch (err) {
-    console.log('ERR inquiryListPokemon', err)
-    store.commit("setLoading", false)
+    console.log('ERR inquiryListPokemon', err);
+    commit("setLoading", false);
   }
 };
 
+export const fetchFavoritePokemon = async ({ commit }) => {
+  try {
+    let dataLocal = localStorage.getItem('fav_pokemon');
+    if (dataLocal) {
+      dataLocal = JSON.parse(dataLocal);
+      commit("setInitFavPokemonList", dataLocal);
+      return;
+    }
+    commit("setInitFavPokemonList", []);
+  } catch (err) {
+    console.log('ERR fetchFavoritePokemon', err);
+  }
+} 
 // export const inquiryDetailPokemon = async (payload) => {
 //   const req = {
 //     url: payload.url,

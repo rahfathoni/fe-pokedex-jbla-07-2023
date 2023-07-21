@@ -1,11 +1,12 @@
 <template>
-  <q-dialog ref="dialogRef" 
+  <q-dialog 
+    ref="dialogRef" 
     @hide="onDialogHide" 
     transition-show="slide-up" 
     transition-hide="slide-down" 
     :maximized="$q.platform.is.mobile"
     >
-    <q-card class="q-dialog-plugin" style="width: 1000px">
+    <q-card class="q-dialog-plugin" style="width: 1000px; border: 2px solid blue; border-radius: 8px;">
       <q-bar style="border-bottom: 2px solid blue; background-color: yellow" class="glossy" >
         <q-space />
         <q-btn dense flat text-color="blue" size="15px" icon="close" v-close-popup>
@@ -29,53 +30,77 @@
           :alt="`Slide ${index + 1}`" 
         />
       </q-carousel>
-
       <q-card-section class="q-pt-sm" style="text-align: center;">
-        <div class="text-h6 text-uppercase">[#{{ detail.id }}] {{ detail.name }}</div>
+        <div class="text-h6 text-uppercase">[#{{ pokemonData.id }}] {{ pokemonData.name }}</div>
+        <div>
+          <q-chip 
+            v-for="(item, index) in detailTypes"
+            :key="index" 
+            :name="item"
+            :style="{
+              'background-color': findColorType(item).bg,
+              'border' : '1px solid blue'
+            }" 
+            :text-color="findColorType(item).text"
+            class="text-weight-bold glossy"
+            :ripple="false"
+          >
+            {{item.toUpperCase()}}
+          </q-chip>
+        </div>
       </q-card-section>
-        <!-- <div class="text-subtitle2">by John Doe</div> -->
 
       <q-card-section class="q-pt-none">
-        under constraction
+        other detail under constraction
       </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { ref, computed } from "vue";
+// import { useStore } from "vuex";
 import { useDialogPluginComponent } from "quasar";
+import { typeColor } from '@/utils.js';
 
 export default {
   name: "PokemonDetailDesktopDialog",
   emits: [...useDialogPluginComponent.emits],
-  setup() {
+  props: {
+    pokemonData: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props) {
     const { dialogRef, onDialogHide } = useDialogPluginComponent();
-    const store = useStore();
+    // const store = useStore();
+
     const slide = ref(1);
+    const detailPicture = ref([
+      props.pokemonData.sprites.other['official-artwork'].front_default,
+      props.pokemonData.sprites.other.home.front_default,
+      props.pokemonData.sprites.other.dream_world.front_default,
+      props.pokemonData.sprites.front_default,
+      props.pokemonData.sprites.other['official-artwork'].front_shiny
+    ].filter((item) => item !== null));
+    const detailTypes = computed(() => {
+      return props.pokemonData.types.map((item) => item.type.name);
+    })
 
-    //COMPUTED
-    const detail = computed(() => store.getters["main/getPokemonDetail"]);
-    const detailPicture = computed(() => {
-      const choosenPic = [
-        detail.value.sprites.other['official-artwork'].front_default,
-        detail.value.sprites.other.home.front_default,
-        detail.value.sprites.other.dream_world.front_default,
-        detail.value.sprites.front_default,
-        detail.value.sprites.other['official-artwork'].front_shiny
-      ]
-      return choosenPic.filter((item) => item !== null);
-    });
+    const findColorType = (item) => {
+      return typeColor(item)
+    }
 
-    // console.log(store.getters["main/getPokemonDetail"])
+    console.log('check prop =>',props.pokemonData)
 
     return {
       dialogRef,
-      detail,
       onDialogHide,
       slide,
       detailPicture,
+      detailTypes,
+      findColorType
     };
   }
 };

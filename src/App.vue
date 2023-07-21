@@ -63,11 +63,19 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'LayoutDefault',
   setup () {
+    const store = useStore();
+
+    //BEFORE MOUNTED
+    onBeforeMount(async () => {
+      await store.dispatch("main/fetchFavoritePokemon");
+    });
+
     return {
       leftDrawerOpen: ref(false)
     }

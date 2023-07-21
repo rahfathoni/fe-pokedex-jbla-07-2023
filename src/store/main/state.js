@@ -4,6 +4,6 @@ export default function () {
     offset: 0,
     loading: false,
     endData: false,
-    pokemonDetail: ''
+    favPokemonList: []
   };
 }

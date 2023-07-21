@@ -83,9 +83,11 @@ export default {
       }
     }
     const detailDialog = async (item) => {
-      store.commit('main/setPokemonDetail', item);
       $q.dialog({
         component: PokemonDetailComponent,
+        componentProps: {
+          pokemonData: item,
+        }
       }).onOk(() => {});
     }
 
