@@ -19,6 +19,10 @@ export const setPokemonList = async (state, value) => {
   state.pokemonList = data;
 }
 
+export const setPokemonByType = async (state, value) => {
+  state.pokemonList = value;
+}
+
 export const setLoading = (state, value) => {
   state.loading = value;
   if (state.loading) {
@@ -32,6 +36,7 @@ export const setLoading = (state, value) => {
 }
 
 export const setOffset = (state, value) => {
+  if (value === 0) return state.offset = 0;
   state.offset = state.offset + value;
 }
 

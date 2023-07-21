@@ -6,9 +6,9 @@ export default function () {
     endData: false,
     favPokemonList: [],
     optionType: [
-      'normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting',
-      'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost',
-      'dragon', 'dark', 'steel', 'fairy'
+      'NORMAL', 'FIRE', 'WATER', 'ELECTRIC', 'GRASS', 'ICE', 'FIGHTING',
+      'POISON', 'GROUND', 'FLYING', 'PSYCHIC', 'BUG', 'ROCK', 'GHOST',
+      'DRAGON', 'DARK', 'STEEL', 'FAIRY'
     ]
   };
 }

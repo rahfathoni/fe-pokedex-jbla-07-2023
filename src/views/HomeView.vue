@@ -7,22 +7,28 @@
         <q-img  class="q-ml-lg" :width="$q.platform.is.mobile ? '15%' : '10%'" :src="require('@/assets/pokeball.png')" alt="pokeball2" />
       </div>
     </div>
-    <!-- <div class="text-left"> 
-      <q-select rounded outlined bottom-slots v-model="typeFilter" :options="options" label="Choose Type...">
-        <template v-slot:before>
-          <q-icon name="flight_takeoff" />
-        </template>
+    <div class="fit row justify-start items-start content-start q-mb-none q-pb-none q-mt-md">
+      <div class="col-md-5 col-xs-12">
+        <q-select 
+          v-model="typeFilter" 
+          hide-bottom-space 
+          rounded 
+          outlined 
+          bottom-slots 
+          :options="optionType" 
+          label="Choose Type..."
+          @update:model-value="inputFilterType"
+        >
+          <template v-slot:before>
+            <q-icon size="md" name="search" />
+          </template>
 
-        <template v-slot:append>
-          <q-icon v-if="typeFilter !== ''" name="close" @click.stop.prevent="typeFilter = ''" class="cursor-pointer" />
-          <q-icon name="search" @click.stop.prevent />
-        </template>
-
-        <template v-slot:hint>
-          Field hint
-        </template>
-      </q-select>
-    </div> -->
+          <template v-slot:append>
+            <q-icon v-if="typeFilter" name="close" @click.stop.prevent="clearInputType" class="cursor-pointer" />
+          </template>
+        </q-select>
+      </div>
+    </div>
 
     <div class="fit row inline wrap justify-around items-start content-start">
       <q-card
@@ -108,6 +114,20 @@ export default {
         }
       }).onOk(() => {});
     }
+    const inputFilterType = async () => {
+      if (typeFilter.value) {
+        await store.dispatch("main/inquiryPokemonByType", {
+            type: typeFilter.value
+        });
+      }
+    }
+    const clearInputType = async () => {
+      typeFilter.value = '';
+      await store.dispatch("main/inquiryListPokemon", {
+        offset: 0,
+        afterType: true
+      }); 
+    }
 
     return {
       pokemonList,
@@ -115,7 +135,9 @@ export default {
       scrollComponent,
       detailDialog,
       typeFilter,
-      optionType
+      optionType,
+      inputFilterType,
+      clearInputType
     };
   }
 }
