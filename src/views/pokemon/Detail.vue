@@ -90,9 +90,9 @@
           class="fit row inline wrap justify-start items-start content-start q-pt-md"
           style="font-size: 15px"
         >
-          <div class="col-4 q-mb-sm">HEIGHT</div>
+          <div class="col-md-4 col-xs-5 q-mb-sm">HEIGHT</div>
           <div class="col-1">:</div>
-          <div class="col-7 text-weight-medium">
+          <div class="col-md-7 col-xs-6 text-weight-medium">
             {{ convertHeight }} CM
           </div>
         </div>
@@ -100,9 +100,9 @@
           class="fit row inline wrap justify-start items-start content-start q-pt-none"
           style="font-size: 15px"
         >
-          <div class="col-4 q-mb-sm">WEIGHT</div>
+          <div class="col-md-4 col-xs-5 q-mb-sm">WEIGHT</div>
           <div class="col-1">:</div>
-          <div class="col-7 text-weight-medium">
+          <div class="col-md-7 col-xs-6 text-weight-medium">
             {{ convertWeight }} KG
           </div>
         </div>
@@ -112,9 +112,9 @@
           class="fit row inline wrap justify-start items-start content-start q-pt-none"
           style="font-size: 15px"
         >
-          <div class="col-4 q-mb-sm">{{ item.name }}</div>
+          <div class="col-md-4 col-xs-5 q-mb-sm">{{ item.name }}</div>
           <div class="col-1">:</div>
-          <div class="col-7 text-weight-medium">
+          <div class="col-md-7 col-xs-6 text-weight-medium">
             {{ item.base_stat }}
           </div>
         </div>
